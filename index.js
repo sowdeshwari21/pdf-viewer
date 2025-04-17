@@ -3,6 +3,9 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import pdfRoute from "./route/pdfRoute.js";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import path from "path";
 
 dotenv.config();
 
@@ -10,6 +13,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/pdf", pdfRoute);
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+  app.use(express.static(path.resolve(__dirname, "./public")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "./public", "index.html"));
+  });
 
 // Connect to MongoDB
 mongoose
